@@ -18,5 +18,22 @@ module.exports = function BooksController(app) {
           .json(books);
       });
     },
+
+    create(request, response) {
+      const book = new Book();
+      book.title = request.body.title;
+      book.author = request.body.author;
+      book.save(error => {
+        if (error) {
+          return response
+            .status(500)
+            .send(error);
+        }
+
+        return response
+          .status(200)
+          .send({ message: 'Book added!' });
+      });
+    },
   };
 };

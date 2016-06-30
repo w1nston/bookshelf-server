@@ -7,7 +7,8 @@ module.exports = function routes(router, app) {
   router.use(routerMiddleware);
 
   router.route('/books')
-    .get(booksController.index);
+    .get(booksController.index)
+    .post(booksController.create);
 
   return router;
 };
