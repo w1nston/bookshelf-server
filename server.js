@@ -13,38 +13,53 @@ let server;
 
 app.set('logger', logger);
 
-function startServer() {
+function startServer(dbConnection) {
+  app.set('dbConnection', dbConnection);
+  logger.info('Established connection to mongodb');
+  logger.info('Initializing server');
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
-
+  logger.info('Setting up routes');
   app.use('/', router(expressRouter, app));
   server = app.listen(config.port);
-  logger.info(`Listening in on port ${config.port}`);
+  logger.info(`Server started. Listening in on port ${config.port}`);
 }
 
-function stopServer(error) {
-  if (error) {
-    logger.error('Some error occurred, stopping the server:', error);
-  }
-
+function closeDbConnection() {
   const dbConnection = app.get('dbConnection');
   if (dbConnection) {
     logger.info('Closing mongoose connection.');
     dbConnection.close();
     logger.info('mongoose connection closed.');
     app.set('dbConnection', null);
+  } else {
+    logger.info('No mongoose connection established, nothing to close.');
   }
+}
 
+function closeServerConnection() {
   if (server) {
     logger.info('Shuting down server.');
     server.close();
     logger.info('Server is shut down.');
     server = null;
+  } else {
+    logger.info('No server up and running, nothing to close.');
   }
+}
+
+function stopServer(error) {
+  if (error) {
+    logger.error('Some error occurred, stopping the server due to:', error);
+  }
+  closeDbConnection();
+  closeServerConnection();
 }
 
 process.on('exit', stopServer);
 process.on('SIGINT', stopServer);
 process.on('uncaughtException', stopServer);
 
-database.init(app, startServer);
+database.init(app)
+  .then(dbConnection => startServer(dbConnection))
+  .catch(reason => stopServer(reason));
