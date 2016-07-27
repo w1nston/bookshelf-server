@@ -3,7 +3,6 @@ const config = require('./config/index')[env];
 
 const express = require('express');
 const expressRouter = new express.Router();
-const bodyParser = require('body-parser');
 const logger = require('./config/logger');
 const database = require('./db');
 const router = require('./config/routes');
@@ -17,8 +16,6 @@ function startServer(dbConnection) {
   app.set('dbConnection', dbConnection);
   logger.info('Established connection to mongodb');
   logger.info('Initializing server');
-  app.use(bodyParser.urlencoded({ extended: true }));
-  app.use(bodyParser.json());
   logger.info('Setting up routes');
   app.use('/', router(expressRouter, app));
   server = app.listen(config.port);

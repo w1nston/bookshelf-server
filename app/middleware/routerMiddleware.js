@@ -1,11 +1,10 @@
+const moment = require('moment');
 const logger = require('../../config/logger');
 
 function logIncomingRequest(request) {
-  logger.info(`Incoming ${request.method} request to ${request.originalUrl}`);
-}
-
-function logOutgoingResponse(response) {
-  logger.info(`Response status: ${response.statusCode}`);
+  logger.info(
+    `[${moment().toISOString()}] Incoming ${request.method} request to ${request.originalUrl}`
+  );
 }
 
 function addHeadersToResponse(response) {
@@ -15,7 +14,6 @@ function addHeadersToResponse(response) {
 
 module.exports = function routerMiddleware(request, response, next) {
   logIncomingRequest(request);
-  logOutgoingResponse(response);
   addHeadersToResponse(response);
   next();
 };

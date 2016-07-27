@@ -1,18 +1,20 @@
-const Book = require('../models/book');
+const BookModel = require('../models/bookModel');
 
 module.exports = function BooksController(app) {
   const logger = app.get('logger');
+  const bookModel = new BookModel(app);
 
   return {
     index(request, response) {
-      Book.find((error, books) => {
+      bookModel.findAll((error, books) => {
         if (error) {
-          logger.error(error);
+          logger.error('Server responded with status 500');
+          logger.error('Internal error', error);
           return response
             .status(500)
             .json(error);
         }
-
+        logger.info('Response status: 200');
         return response
           .status(200)
           .json(books);
@@ -20,19 +22,18 @@ module.exports = function BooksController(app) {
     },
 
     create(request, response) {
-      const book = new Book();
-      book.title = request.body.title;
-      book.author = request.body.author;
-      book.save(error => {
+      bookModel.create(request.body, error => {
         if (error) {
+          logger.error('Server responded with status 500');
+          logger.error('Internal error:', error);
           return response
             .status(500)
             .send(error);
         }
-
+        logger.info('Server responded with status 201');
         return response
-          .status(200)
-          .send({ message: 'Book added!' });
+          .status(201)
+          .send({ message: 'BookModel added!' });
       });
     },
   };

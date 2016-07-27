@@ -6,9 +6,8 @@ const mongoose = require('mongoose');
 
 module.exports.init = function init() {
   return new Promise((resolve, reject) => {
-    mongoose.connect(dbUri);
-    const dbConnection = mongoose.connection;
-    dbConnection.on('error', () => reject('mongodb connection error'));
+    const dbConnection = mongoose.createConnection(dbUri);
+    dbConnection.on('error', () => reject('Could not establish connection with mongodb'));
     resolve(dbConnection);
   });
 };
