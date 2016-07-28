@@ -1,9 +1,8 @@
-const moment = require('moment');
 const logger = require('../../config/logger');
 
 function logIncomingRequest(request) {
   logger.info(
-    `[${moment().toISOString()}] Incoming ${request.method} request to ${request.originalUrl}`
+    `Incoming ${request.method} request to ${request.originalUrl}`
   );
 }
 
