@@ -10,7 +10,7 @@ module.exports = function BooksController(app) {
         .then(books => response.status(200).json(books))
         .catch(error => {
           logger.error('Internal error: ', error);
-          response.status(500).json(error)
+          response.status(500).json(error);
         });
     },
 
@@ -19,7 +19,7 @@ module.exports = function BooksController(app) {
         .then(() => response.status(201).send({ message: 'Book model added' }))
         .catch(error => {
           logger.error('Internal error: ', error);
-          response.status(500).send(error)
+          response.status(500).send(error);
         });
     },
   };
