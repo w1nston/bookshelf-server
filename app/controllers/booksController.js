@@ -2,7 +2,7 @@ const BookModel = require('../models/bookModel');
 
 module.exports = function BooksController(app) {
   const logger = app.get('logger');
-  const bookModel = new BookModel(app);
+  const bookModel = new BookModel(app.get('dbConnection'));
 
   return {
     index(request, response) {

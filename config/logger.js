@@ -14,7 +14,9 @@ module.exports = new (winston.Logger)({
           (undefined !== options.message ? options.message : '') +
           (
             options.meta &&
-            Object.keys(options.meta).length ? '\n\t' + JSON.stringify(options.meta) : ''
+            Object.keys(options.meta).length ?
+            '\n\t' + JSON.stringify(options.meta) :
+            ''
           );
       }
     }),

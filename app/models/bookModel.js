@@ -8,8 +8,7 @@ function bookSchema() {
   }, { timestamps: true });
 }
 
-module.exports = function bookModel(app) {
-  const dbConnection = app.get('dbConnection');
+module.exports = function bookModel(dbConnection) {
   const model = dbConnection.model('Book', bookSchema());
 
   return {
