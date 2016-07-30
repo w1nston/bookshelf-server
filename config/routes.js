@@ -1,10 +1,10 @@
 const routerMiddleware = require('../app/middleware/routerMiddleware');
-const BooksController = require('../app/controllers/booksController');
+const booksController = require('../app/controllers/booksController');
 const bodyParser = require('body-parser');
 const urlEncodedParser = bodyParser.json({ type: 'application/x-www-form-urlencoded' });
 
 module.exports = function routes(router, app) {
-  const booksController = new BooksController(app);
+  const booksCtrl = booksController(app);
 
   router.use(
     routerMiddleware,
@@ -12,8 +12,8 @@ module.exports = function routes(router, app) {
   );
 
   router.route('/books')
-    .get(booksController.index)
-    .post(booksController.create);
+    .get(booksCtrl.index)
+    .post(booksCtrl.create);
 
   return router;
 };

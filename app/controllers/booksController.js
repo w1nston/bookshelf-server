@@ -1,12 +1,12 @@
-const BookModel = require('../models/bookModel');
+const bookModel = require('../models/bookModel');
 
-module.exports = function BooksController(app) {
+module.exports = function booksController(app) {
   const logger = app.get('logger');
-  const bookModel = new BookModel(app.get('dbConnection'));
+  const book = bookModel(app.get('dbConnection'));
 
   return {
     index(request, response) {
-      return bookModel.findAll()
+      return book.findAll()
         .then(books => response.status(200).json(books))
         .catch(error => {
           logger.error('Internal error: ', error);
@@ -15,7 +15,7 @@ module.exports = function BooksController(app) {
     },
 
     create(request, response) {
-      bookModel.create(request.body)
+      book.create(request.body)
         .then(() => response.status(201).send({ message: 'Book model added' }))
         .catch(error => {
           logger.error('Internal error: ', error);
