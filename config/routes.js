@@ -1,19 +1,25 @@
 const routerMiddleware = require('../app/middleware/routerMiddleware');
-const booksController = require('../app/controllers/booksController');
+const bookModelFactory = require('../app/models/bookModel');
+const booksControllerFactory = require('../app/controllers/booksController');
 const bodyParser = require('body-parser');
 const urlEncodedParser = bodyParser.json({ type: 'application/x-www-form-urlencoded' });
 
-module.exports = function routes(router, app) {
-  const booksCtrl = booksController(app);
+function createBooksController(dbConnection) {
+  const bookModel = bookModelFactory(dbConnection);
+  return booksControllerFactory(bookModel);
+}
 
-  router.use(
+module.exports = function routes(router, dbConnection) {
+  const booksController = createBooksController(dbConnection);
+
+    router.use(
     routerMiddleware,
     urlEncodedParser
   );
 
   router.route('/books')
-    .get(booksCtrl.index)
-    .post(booksCtrl.create);
+    .get(booksController.index)
+    .post(booksController.create);
 
   return router;
 };

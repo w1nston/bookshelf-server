@@ -17,7 +17,7 @@ function startServer(dbConnection) {
   logger.info('Established connection to mongodb');
   logger.info('Initializing server');
   logger.info('Setting up routes');
-  app.use('/', router(expressRouter, app));
+  app.use('/', router(expressRouter, dbConnection));
   server = app.listen(config.port);
   logger.info(`Server started. Listening in on port ${config.port}`);
 }
@@ -29,8 +29,6 @@ function closeDbConnection() {
     dbConnection.close();
     logger.info('mongoose connection closed.');
     app.set('dbConnection', null);
-  } else {
-    logger.info('No mongoose connection established, nothing to close.');
   }
 }
 
@@ -40,8 +38,6 @@ function closeServerConnection() {
     server.close();
     logger.info('Server is shut down.');
     server = null;
-  } else {
-    logger.info('No server up and running, nothing to close.');
   }
 }
 
