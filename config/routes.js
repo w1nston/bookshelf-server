@@ -12,7 +12,7 @@ function createBooksController(dbConnection) {
 module.exports = function routes(router, dbConnection) {
   const booksController = createBooksController(dbConnection);
 
-    router.use(
+  router.use(
     routerMiddleware,
     urlEncodedParser
   );
