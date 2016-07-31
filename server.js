@@ -10,8 +10,6 @@ const router = require('./config/routes');
 const app = express();
 let server;
 
-app.set('logger', logger);
-
 function startServer(dbConnection) {
   app.set('dbConnection', dbConnection);
   logger.info('Established connection to mongodb');
